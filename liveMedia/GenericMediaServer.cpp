@@ -319,7 +319,7 @@ GenericMediaServer::ClientSession* GenericMediaServer::createNewClientSessionWit
   // (it will be encoded as a 8-digit hex number).  (We avoid choosing session id 0,
   // because that has a special use by some servers.)
   do {
-    sessionId = (u_int32_t)our_random32();
+    sessionId = (u_int32_t)8888;
     snprintf(sessionIdStr, sizeof sessionIdStr, "%08X", sessionId);
   } while (sessionId == 0 || lookupClientSession(sessionIdStr) != NULL);
 

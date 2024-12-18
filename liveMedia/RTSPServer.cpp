@@ -1594,6 +1594,7 @@ void RTSPServer::RTSPClientSession
     }
   }
   if (noSubsessionsRemain) delete this;
+  //exit(0);
 }
 
 void RTSPServer::RTSPClientSession

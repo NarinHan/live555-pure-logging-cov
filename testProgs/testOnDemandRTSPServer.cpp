@@ -20,6 +20,9 @@ along with this library; if not, write to the Free Software Foundation, Inc.,
 
 #include "liveMedia.hh"
 #include "BasicUsageEnvironment.hh"
+#include <signal.h>
+#include <unistd.h>
+
 
 UsageEnvironment* env;
 
@@ -38,6 +41,13 @@ static void announceStream(RTSPServer* rtspServer, ServerMediaSession* sms,
 
 static char newDemuxWatchVariable;
 
+
+void sig_handler(int signo)
+{
+  if (signo == SIGUSR1)
+    exit(0);
+}
+
 static MatroskaFileServerDemux* matroskaDemux;
 static void onMatroskaDemuxCreation(MatroskaFileServerDemux* newDemux, void* /*clientData*/) {
   matroskaDemux = newDemux;
@@ -51,6 +61,7 @@ static void onOggDemuxCreation(OggFileServerDemux* newDemux, void* /*clientData*
 }
 
 int main(int argc, char** argv) {
+  signal(SIGUSR1, sig_handler);
   // Begin by setting up our usage environment:
   TaskScheduler* scheduler = BasicTaskScheduler::createNew();
   env = BasicUsageEnvironment::createNew(*scheduler);
@@ -65,7 +76,7 @@ int main(int argc, char** argv) {
 #endif
 
   // Create the RTSP server:
-  RTSPServer* rtspServer = RTSPServer::createNew(*env, 8554, authDB);
+  RTSPServer* rtspServer = RTSPServer::createNew(*env, atoi(argv[1]), authDB);
   if (rtspServer == NULL) {
     *env << "Failed to create RTSP server: " << env->getResultMsg() << "\n";
     exit(1);

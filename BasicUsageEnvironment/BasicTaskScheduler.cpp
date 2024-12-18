@@ -78,6 +78,7 @@ void BasicTaskScheduler::SingleStep(unsigned maxDelayTime) {
   if (tv_timeToDelay.tv_sec > MAX_TV_SEC) {
     tv_timeToDelay.tv_sec = MAX_TV_SEC;
   }
+
   // Also check our "maxDelayTime" parameter (if it's > 0):
   if (maxDelayTime > 0 &&
       (tv_timeToDelay.tv_sec > (long)maxDelayTime/MILLION ||
